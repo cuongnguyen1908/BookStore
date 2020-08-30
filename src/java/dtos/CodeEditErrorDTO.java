@@ -1,24 +1,32 @@
 package dtos;
 
-import java.sql.Timestamp;
 
 public class CodeEditErrorDTO {
-    private float discountPercent;
-    private Timestamp date;
+    private String codeLenghtError;
+    private String percentError;
+    private String codeExist;
 
-    public float getDiscountPercent() {
-        return discountPercent;
+    public String getCodeExist() {
+        return codeExist;
     }
 
-    public void setDiscountPercent(float discountPercent) {
-        this.discountPercent = discountPercent;
+    public void setCodeExist(String codeExist) {
+        this.codeExist = codeExist;
     }
 
-    public Timestamp getDate() {
-        return date;
+    public String getPercentError() {
+        return percentError;
     }
 
-    public void setDate(Timestamp date) {
-        this.date = date;
+    public void setPercentError(String percentError) {
+        this.percentError = percentError;
+    }
+
+    public String getCodeLenghtError() {
+        return codeLenghtError;
+    }
+
+    public void setCodeLenghtError(String codeLenghtError) {
+        this.codeLenghtError = codeLenghtError;
     }
 }

@@ -93,7 +93,7 @@
                 <div class="input-group-prepend">
                     <span class="input-group-text"><i class="fas fa-calendar"></i></span>
                 </div>
-                <input type="text" class="form-control" name="importDate" value="" id="decadeView">
+                <input type="text" class="form-control" placeholder="Enter date" name="importDate" value="" id="decadeView">
             </div>
         </div>
     </c:if>

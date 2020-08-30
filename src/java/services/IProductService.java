@@ -1,5 +1,6 @@
 package services;
 
+import cart.CartProductObject;
 import dtos.ProductDTO;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface IProductService {
     boolean update(ProductDTO dto, String importDate);
     Long save(ProductDTO dto);
     ProductDTO findBookById(Long id);
+    boolean updateQuantity(CartProductObject cart);
 }

@@ -10,7 +10,7 @@ import java.util.List;
 public class UserCodeDAO extends AbstractDAO<FlagDTO> implements IUserCodeDAO {
     @Override
     public boolean existCodeByUserIdAndCodeId(Long userId, Long codeId) {
-        String sql = "CAST(COUNT(1) AS BIT) AS flag FROM user_code_tb WHERE user_id = ? AND code_id = ?";
+        String sql = "SELECT CAST(COUNT(1) AS BIT) AS flag FROM user_code_tb WHERE user_id = ? AND code_id = ?";
         List<FlagDTO> flag = query(sql, new FlagMapper(), userId, codeId);
         return flag.get(0).isFlag() == true ? true : false;
     }

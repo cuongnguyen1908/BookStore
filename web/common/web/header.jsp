@@ -14,7 +14,7 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ml-auto">
-                
+
                 <c:if test="${not empty sessionScope.USERMODEL}">
                     <li class="nav-item">
                         <a class="nav-link" href="">
@@ -23,7 +23,7 @@
                     </li>
 
                 </c:if>
-                    
+
                 <c:if test="${sessionScope.USERMODEL.role.id == 1}">
                     <li class="nav-item">
                         <a class="nav-link" href="/views/admin/home.jsp">
@@ -40,14 +40,14 @@
                     </li>
                 </c:if>
 
-<c:if test="${sessionScope.USERMODEL.role.id == 2}">
-                <li class="nav-item">
-                    <a class="nav-link" href="/calculate-cart-product">
-                        <i class="material-icons">unarchive</i> View cart
-                        <c:if test="${sessionScope.CARTPRODUCT.cart.size() > 0}">(${sessionScope.CARTPRODUCT.cart.size()})</c:if>
-                    </a>
-                </li>
-</c:if>
+                <c:if test="${sessionScope.USERMODEL.role.id == 2}">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/calculate-cart-product">
+                            <i class="material-icons">unarchive</i> View cart
+                            <c:if test="${sessionScope.CARTPRODUCT.cart.size() > 0}">(${sessionScope.CARTPRODUCT.cart.size()})</c:if>
+                            </a>
+                        </li>
+                </c:if>
 
                 <c:if test="${not empty USERMODEL}">
                     <li class="nav-item">

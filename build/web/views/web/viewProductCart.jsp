@@ -120,8 +120,35 @@
 <c:if test="${not empty requestScope.TOTAL}">
     <h4 class="text-right">Total: $${requestScope.TOTAL}</h4>
 </c:if>
-<c:if test="${not empty sessionScope.CARTPRODUCT.cart}">
-    <a href='<c:url value="/admin-save-cart"/>' class="btn btn-sm btn-success" style="margin-left: 90%;">Order</a>
+
+<c:if test="${not empty requestScope.DISCOUNT}">
+    <h4 class="text-right">Discount: $${requestScope.DISCOUNT}</h4>
+</c:if>
+
+<c:if test="${not empty requestScope.AFTERAPPLY}">
+    <h4 class="text-right">Final: $${requestScope.AFTERAPPLY}</h4>
+</c:if>    
+    
+<c:if test="${not empty requestScope.TOTAL}">
+    <form action="/apply-code" method="POST">
+        <input type="text" name="code" value="${param.code}">
+        <input type="hidden" name="total" value="${requestScope.TOTAL}">
+        <input type="hidden" name="id" value="${sessionScope.USERMODEL.id}">
+        <button type="submit" class="btn btn-primary">Apply</button>
+    </form>
+</c:if>
+    
+
+<c:if test="${not empty sessionScope.CARTPRODUCT.cart}">\
+    <form action="/save-cart" method="POST">
+        <input type="hidden" name="id" value="${sessionScope.USERMODEL.id}"/>
+        <input type="hidden" name="codeId" value="${requestScope.IDCODE}"/>
+        <input type="hidden" name="total" value="${requestScope.TOTAL}"/>
+        <input type="hidden" name="finalTotal" value="${requestScope.AFTERAPPLY}"/>
+        <button type="submit" class="btn btn-sm btn-success" style="margin-left: 90%;">
+            Order
+        </button>
+    </form>
 </c:if>
 
 </body>

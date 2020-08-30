@@ -23,6 +23,6 @@
     </decorator>
     
     <decorator name="login" page="login.jsp">
-        <pattern>/login*</pattern>
+        <pattern>/login</pattern>
     </decorator>
 </decorators>

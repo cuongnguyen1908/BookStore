@@ -15,6 +15,10 @@ import java.util.Map;
  */
 public class CartProductObject {
     private Map<Long, ProductCartDTO> cart;
+    
+//    public CartProductObject() {
+//        cart = new HashMap<>();
+//    }
 
     public Map<Long, ProductCartDTO> getCart() {
         return cart;

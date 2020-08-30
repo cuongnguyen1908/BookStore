@@ -1,5 +1,6 @@
 package services.impl;
 
+import cart.CartProductObject;
 import daos.IProductDAO;
 import dtos.ProductDTO;
 import services.IProductService;
@@ -45,5 +46,10 @@ public class ProductService implements IProductService {
     @Override
     public List<ProductDTO> findAll() {
         return this.product.findAll();
+    }
+
+    @Override
+    public boolean updateQuantity(CartProductObject cart) {
+        return this.product.updateQuantity(cart);
     }
 }

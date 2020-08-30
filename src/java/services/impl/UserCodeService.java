@@ -16,6 +16,6 @@ public class UserCodeService implements IUserCodeService {
 
     @Override
     public Long save(UserCodeDTO dto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.userCode.save(dto);
     }
 }

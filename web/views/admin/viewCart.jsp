@@ -62,9 +62,8 @@
             <c:if test="${not empty CART.cart}">
                 <button type="submit" class="btn btn-sm btn-danger" style="margin-left: 90%;">Remove</button>
             </c:if>
-
-
         </form>
+
         <c:if test="${not empty CART.cart}">
             <a href='<c:url value="/admin-save-cart"/>' class="btn btn-sm btn-success" style="margin-left: 90%;">Save</a>
         </c:if>

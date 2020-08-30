@@ -1,5 +1,6 @@
 package daos;
 
+import cart.CartProductObject;
 import dtos.ProductDTO;
 
 import java.util.List;
@@ -12,4 +13,9 @@ public interface IProductDAO {
     boolean update(ProductDTO dto, String importDate);
     Long save(ProductDTO dto);
     ProductDTO findBookById(Long id);
+    
+    boolean existQuantity(CartProductObject cart);
+    
+    boolean updateQuantity(CartProductObject cart);
+    
 }
