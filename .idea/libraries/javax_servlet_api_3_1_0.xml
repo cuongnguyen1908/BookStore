@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="javax.servlet-api-3.1.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../javax.servlet-api-3.1.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../log4j-1.2.17.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sitemesh-2.4.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../sqljdbc4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../weld-servlet-1.1.0.Final.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

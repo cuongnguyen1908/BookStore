@@ -1,0 +1,18 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="TemplateStart:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/TemplateStart_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/../sqljdbc4.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../commons-beanutils-1.9.3.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../jstl-1.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../sitemesh-2.4.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../weld-servlet-1.1.0.Final.jar" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="TemplateStart/web/Web2" />
+      <element id="javaee-facet-resources" facet="TemplateStart/web/Web" />
+    </root>
+  </artifact>
+</component>
