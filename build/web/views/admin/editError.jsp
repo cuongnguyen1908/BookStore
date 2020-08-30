@@ -8,9 +8,9 @@
     </head>
     <body>
 
-        <form action='<c:url value="/admin-process-edit"/>' method="POST">
+        <form action="/admin-process-edit" method="POST">
 
-            <c:if test="${empty USER.id}">
+            <c:if test="${empty requestScope.USER.id}">
                 <!--username-->
                 <div class="form-group">
                     <label for="username">Username:</label>
@@ -51,8 +51,8 @@
             <div class="form-group">
                 <label for="fullName">Full name:</label>
                 <input type="text" class="form-control" placeholder="Enter fullname" id="fullName"
-                       <c:if test="${not empty USER.id}">value="${USER.fullName}"</c:if>
-                       <c:if test="${empty USER.id}">value="${param.fullName}"</c:if>
+                       <c:if test="${not empty requestScope.USER.id}">value="${requestScope.USER.fullName}"</c:if>
+                       <c:if test="${empty requestScope.USER.id}">value="${param.fullName}"</c:if>
                            name="fullName" >
 
                 <c:if test="${not empty ERROR.fullNameLengthError}">
@@ -65,8 +65,8 @@
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" class="form-control" placeholder="Enter email" id="email"  name="email" 
-                       <c:if test="${not empty USER.id}">value="${USER.email}"</c:if>
-                       <c:if test="${empty USER.id}">value="${param.email}"</c:if>
+                       <c:if test="${not empty requestScope.USER.id}">value="${requestScope.USER.email}"</c:if>
+                       <c:if test="${empty requestScope.USER.id}">value="${param.email}"</c:if>
                            >
 
                 <c:if test="${not empty ERROR.emailError}">
@@ -78,9 +78,9 @@
 
             <div class="form-group">
                 <label for="phone">Phone:</label>
-                <input type="text" onlyNumber class="form-control" placeholder="Enter phone" id="phone" name="phone" 
-                       <c:if test="${not empty USER.id}">value="${USER.phone}"</c:if>
-                       <c:if test="${empty USER.id}">value="${param.phone}"</c:if>
+                <input type="number" min="1" class="form-control" placeholder="Enter phone" id="phone" name="phone" 
+                       <c:if test="${not empty requestScope.USER.id}">value="${requestScope.USER.phone}"</c:if>
+                       <c:if test="${empty requestScope.USER.id}">value="${param.phone}"</c:if>
                            >
 
                 <c:if test="${not empty ERROR.phoneLengthError}">
@@ -91,19 +91,19 @@
 
             <label for="role">Role:</label>
             <select class="form-control mr-2" name="typeRoleId" id="role"
-                    <c:if test="${USERMODEL.id == USER.id}">disabled</c:if>
+            <c:if test="${sessionScope.USERMODEL.id == requestScope.USER.id}">disabled</c:if>
 
                     >
-                <c:if test="${empty USER.id}">
+                <c:if test="${empty requestScope.USER.id}">
                     <c:forEach var="item" items="${ROLELIST.listResult}">
                         <option value="${item.id}">${item.name}</option>
                     </c:forEach>
                 </c:if>
 
-                <c:if test="${not empty USER.id}">
+                <c:if test="${not empty requestScope.USER.id}">
                     <c:forEach var="item" items="${ROLELIST.listResult}">
                         <option value="${item.id}" 
-                                <c:if test="${item.id == USER.role.id}">selected="selected"</c:if>>
+                                <c:if test="${item.id == requestScope.USER.role.id}">selected="selected"</c:if>>
                             ${item.name}
                         </option>
                     </c:forEach>
@@ -115,39 +115,31 @@
 
             <label for="status">Status:</label>
             <select class="form-control mr-2" name="status" id="status"
-                    <c:if test="${USERMODEL.id == USER.id}">disabled</c:if>
+                    <c:if test="${empty sessionScope.USER.id}">disabled</c:if>
+            <c:if test="${sessionScope.USERMODEL.id == requestScope.USER.id}">disabled</c:if>
                     >
-                <c:if test="${empty USER.id}">
+                    <c:if test="${empty requestScope.requestScope.USER.id}">
                     <option value="1">Active</option>
                     <option value="0">Inactive</option>
                 </c:if>
 
                 <!--have USER-->
 
-                <c:if test="${not empty USER.id}">
+                <c:if test="${not empty requestScope.USER.id}">
                     <option value="1"
-                            <c:if test="${USER.status == true}">selected="selected"</c:if>>
+                            <c:if test="${requestScope.USER.status == true}">selected="selected"</c:if>>
                                 Active
                             </option>
                             <option value="0"
-                            <c:if test="${USER.status == false}">selected="selected"</c:if>>
+                            <c:if test="${sessionScope.USER.status == false}">selected="selected"</c:if>>
                                 Inactive
                             </option>
                 </c:if>
 
             </select>
 
-            <!--photo-->
 
-            <div class="form-group">
-                <label for="photo">Photo:</label>
-                <input type="file" accept="image/png, image/jpeg" class="form-control-file border" name="file">
-                <c:if test="${not empty ERROR.fileEmpty}">
-                    <font color="red">${ERROR.fileEmpty}</font><br/>
-                </c:if>
-            </div>
-
-            <input type="hidden" value="${USER.id}" name="id"/>
+            <input type="hidden" value="${requestScope.USER.id}" name="id"/>
             <button type="submit" class="btn btn-primary">Save</button>
         </form>
     </body>

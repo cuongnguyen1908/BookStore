@@ -16,7 +16,6 @@ public class CategoryMapper implements RowMapper<CategoryDTO> {
             category.setName(rs.getString("category_name"));
             return category;
         }catch (SQLException e ) {
-            e.printStackTrace();
             logger.error("AbstractDAO_SQLException " + e.getMessage());
         }
         return null;

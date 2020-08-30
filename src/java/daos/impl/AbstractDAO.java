@@ -46,7 +46,6 @@ public class AbstractDAO<T> implements GenericDAO<T> {
             return results;
         } catch (SQLException | NamingException e) {
             logger.error("AbstractDAO_SQLException | NamingException" + e.getMessage());
-            e.printStackTrace();
             return null;
         } finally {
             try {
@@ -61,7 +60,6 @@ public class AbstractDAO<T> implements GenericDAO<T> {
                 }
             } catch (SQLException e) {
                 logger.error("AbstractDAO_SQLException " + e.getMessage());
-                e.printStackTrace();
                 return null;
             }
         }
@@ -83,7 +81,6 @@ public class AbstractDAO<T> implements GenericDAO<T> {
 
         } catch (SQLException | NamingException e) {
             logger.error("AbstractDAO_SQLException " + e.getMessage());
-            e.printStackTrace();
             if (connection != null) {
                 try {
                     connection.rollback();
@@ -126,13 +123,11 @@ public class AbstractDAO<T> implements GenericDAO<T> {
             connection.commit();
             return id;
         } catch (SQLException | NamingException e) {
-            e.printStackTrace();
             if (connection != null) {
                 try {
                     connection.rollback();
                 } catch (SQLException e1) {
                     logger.error("AbstractDAO_SQLException " + e1.getMessage());
-                    e.printStackTrace();
                 }
             }
         } finally {
@@ -148,8 +143,6 @@ public class AbstractDAO<T> implements GenericDAO<T> {
                 }
             } catch (SQLException e2) {
                 logger.error("AbstractDAO_SQLException " + e2.getMessage());
-
-                e2.printStackTrace();
             }
         }
         return null;
@@ -185,7 +178,6 @@ public class AbstractDAO<T> implements GenericDAO<T> {
                 }
             } catch (SQLException e) {
                 logger.error("AbstractDAO_SQLException " + e.getMessage());
-
                 return 0;
             }
         }
@@ -216,7 +208,6 @@ public class AbstractDAO<T> implements GenericDAO<T> {
             }
         } catch (SQLException e) {
             logger.error("AbstractDAO_SQLException " + e.getMessage());
-            e.printStackTrace();
         }
 
     }

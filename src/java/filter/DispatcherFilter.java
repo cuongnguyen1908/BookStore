@@ -30,8 +30,6 @@ public class DispatcherFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
                          FilterChain chain)
             throws IOException, ServletException {
-        System.out.println("work dispatcher filter");
-        
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String uri = request.getRequestURI();
@@ -60,8 +58,7 @@ public class DispatcherFilter implements Filter {
                 chain.doFilter(servletRequest, servletResponse);
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error("DispatCherFilter_SQLException " + e.getMessage());
+            logger.error("DispatCherFilter_Exception " + e.getMessage());
         }
 
     }

@@ -47,6 +47,13 @@
                             <c:if test="${sessionScope.CARTPRODUCT.cart.size() > 0}">(${sessionScope.CARTPRODUCT.cart.size()})</c:if>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/history">
+                                <i class="material-icons">unarchive</i> History
+
+                            </a>
+                        </li>
                 </c:if>
 
                 <c:if test="${not empty USERMODEL}">

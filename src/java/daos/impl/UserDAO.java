@@ -40,7 +40,7 @@ public class UserDAO extends AbstractDAO<UserDTO> implements IUserDAO {
 
     @Override
     public List<UserDTO> findAllByFullNameAndRoleAndStatus(String textSearch, Long roleId, boolean status) {
-        String sql = "SELECT u.id, u.username, u.fullname, u.email, u.phone, u.role_id, r.role_name as roname "
+        String sql = "SELECT u.id, u.username, u.full_name, u.email, u.phone, u.role_id, r.role_name as roname "
                 + "FROM [user_tb] as u "
                 + "INNER JOIN role_tb as r on r.id = u.role_id "
                 + "WHERE u.[status] = ? AND LOWER(u.full_name) like ? AND u.role_id = ?";
@@ -77,14 +77,14 @@ public class UserDAO extends AbstractDAO<UserDTO> implements IUserDAO {
 
     @Override
     public Long save(UserDTO userDTO) {
-        String sql = "INSERT INTO [user_tb] (username, password, fullname, role_id, status, email, phone) values (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [user_tb] (username, password, full_name, role_id, status, email, phone) values (?, ?, ?, ?, ?, ?, ?)";
 
         return insert(sql, userDTO.getUsername(), userDTO.getPassword(), userDTO.getFullName(), userDTO.getRoleId(), userDTO.isStatus(), userDTO.getEmail(), userDTO.getPhone());
     }
 
     @Override
     public boolean update(UserDTO userDTO) {
-        String sql = "UPDATE [user_tb] SET password = ?, fullname = ?, role_id = ?, status = ?, email = ?, phone = ?, photo = ? WHERE id = ?";
+        String sql = "UPDATE [user_tb] SET password = ?, full_name = ?, role_id = ?, status = ?, email = ?, phone = ? WHERE id = ?";
         return update(sql, userDTO.getPassword(), userDTO.getFullName(), userDTO.getRoleId(), userDTO.isStatus(), userDTO.getEmail(), userDTO.getPhone(), userDTO.getId());
 
     }

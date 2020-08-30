@@ -9,15 +9,25 @@ import java.util.List;
 
 public class OrderService implements IOrderService {
     @Inject
-    private IOrderDAO order;
+    private IOrderDAO orderDAO;
 
     @Override
     public Long save(Long userId, String name, float total) {
-        return this.order.save(userId, name, total);
+        return this.orderDAO.save(userId, name, total);
     }
 
     @Override
     public List<OrderDTO> findAllByUserId(Long userId) {
-        return this.order.findAllByUserId(userId);
+        return this.orderDAO.findAllByUserId(userId);
+    }
+
+    @Override
+    public boolean deleteOrderById(Long id) {
+        return this.orderDAO.deleteOrderById(id);
+    }
+
+    @Override
+    public List<OrderDTO> findByNameAndUserId(Long userId, String textSearch) {
+        return this.orderDAO.findByNameAndUserId(userId, textSearch);
     }
 }

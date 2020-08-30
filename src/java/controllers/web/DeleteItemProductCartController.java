@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import utils.CalculateTotal;
 
 /**
  * @author nguyen
@@ -39,17 +40,17 @@ public class DeleteItemProductCartController extends HttpServlet {
                                     SessionUtil.getInstance().putValue(request, "CARTPRODUCT", cart);
 
                 }
+                request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
                 request.setAttribute("TYPE", "success");
                 request.setAttribute("MESSAGE", "Remove success!");
             } else {
+                request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
                 request.setAttribute("TYPE", "danger");
                 request.setAttribute("MESSAGE", "Remove fail!");
             }
 
-
         }
  
-
         RequestDispatcher rd = request.getRequestDispatcher(CART_PRODUCT_PAGE);
         rd.forward(request, response);
     }

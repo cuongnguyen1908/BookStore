@@ -35,12 +35,12 @@
             </div>
             <div class="d-flex align-items-center">
                 <div class="form-group m-0">
-                    <input type="text" class="form-control mr-2" style="max-width: 130px;" name="priceMin"
+                    <input type="number" min="0" class="form-control mr-2" style="max-width: 130px;" name="priceMin"
                            placeholder="Min"
                            value="${param.priceMin}">
                 </div>
                 <div class="form-group m-0">
-                    <input type="text" class="form-control" style="max-width: 130px;" name="priceMax" placeholder="Max"
+                    <input type="number" min="0" class="form-control" style="max-width: 130px;" name="priceMax" placeholder="Max"
                            value="${param.priceMax}">
                 </div>
                 <button type="submit" class="btn btn-success ml-2">Search</button>
@@ -68,7 +68,12 @@
             </div>
         </div>
         </c:forEach>
+        
+        
     </div>
+                           <c:if test="${requestScope.PRODUCTLIST.listResult.size() == 0}">
+            <h3 class="text-center">No product found</h3>
+        </c:if>
 </c:if>
 
 <c:if test="${sessionScope.USERMODEL.getRole().getId() == 1 }">

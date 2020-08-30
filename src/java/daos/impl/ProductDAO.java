@@ -74,30 +74,20 @@ public class ProductDAO extends AbstractDAO<ProductDTO> implements IProductDAO {
 
         if (flagPriceMin == true && flagPriceMax == true && flagCategory == true) {// exist all
             product = query(sql, new ProductMapper(), status, "%" + name + "%", priceMin, priceMax, categoryId);
-            System.out.println("worked exist all ");
         } else if (flagPriceMin == true && flagPriceMax == false && flagCategory == false) {// exist  min
             product = query(sql, new ProductMapper(), status, "%" + name + "%", priceMin);
-            System.out.println("worked exist exist min ");
         } else if (flagPriceMin == true && flagPriceMax == true && flagCategory == false) { //exist min, max
             product = query(sql, new ProductMapper(), status, "%" + name + "%", priceMin, priceMax);
-            System.out.println("sql: " + sql);
-            System.out.println("worked exist  min, max ");
         } else if (flagPriceMin == true && flagCategory == true && flagPriceMax == false) { // exist min, category
             product = query(sql, new ProductMapper(), status, "%" + name + "%", priceMin, categoryId);
-            System.out.println("worked exist  min, category ");
         } else if (flagPriceMax) {  // exist max
             product = query(sql, new ProductMapper(), status, "%" + name + "%", priceMax);
-            System.out.println("worked exist max ");
         } else if (flagPriceMax == true && flagCategory == true && flagPriceMin == false) { // exist max, category
             product = query(sql, new ProductMapper(), status, "%" + name + "%", priceMax, categoryId);
-            System.out.println("worked exist max, category ");
         } else if (flagCategory == true && flagPriceMin == false && flagPriceMax == false) { //exist category
             product = query(sql, new ProductMapper(), status, "%" + name + "%", categoryId);
-            System.out.println("sql: " + sql);
-            System.out.println("worked exist category ");
         } else if (flagPriceMin == false && flagPriceMax == false && flagCategory == false) { // none
             product = query(sql, new ProductMapper(), status, "%" + name + "%");
-            System.out.println("worked seach all");
         }
         return product;
     }
@@ -110,11 +100,8 @@ public class ProductDAO extends AbstractDAO<ProductDTO> implements IProductDAO {
 
     @Override
     public boolean update(ProductDTO dto, String importDate) {
-        System.out.println("photo: " + dto.getPhoto());
-        System.out.println("importdate: " + importDate);
 
         if (dto.getPhoto().equals("") && !importDate.equals("")) { // exist photo
-            System.out.println("workd exist photo");
 
             String sql = "UPDATE product_tb "
                     + "SET title = ?, author = ?, quantity = ?, category_id = ? , price = ?, "
@@ -125,7 +112,6 @@ public class ProductDAO extends AbstractDAO<ProductDTO> implements IProductDAO {
                     importDate, dto.getId());
 
         } else if (dto.getPhoto().equals("") && importDate.equals("")) { // not exist photo, import date
-            System.out.println("workd not exist photo, import date");
             String sql = "UPDATE product_tb "
                     + "SET title = ?, author = ?, quantity = ?, category_id = ? , price = ?, "
                     + "[description] = ?, status = ? "
@@ -133,7 +119,6 @@ public class ProductDAO extends AbstractDAO<ProductDTO> implements IProductDAO {
             return update(sql, dto.getTitle(), dto.getAuthor(), dto.getQuantity(),
                     dto.getCategoryId(), dto.getPrice(), dto.getDescription(), dto.isStatus(), dto.getId());
         } else if (!dto.getPhoto().equals("") && importDate.equals("")) { //photo, no import
-            System.out.println("workd has photo, no import");
 
             String sql = "UPDATE product_tb "
                     + "SET title = ?, author = ?, quantity = ?, category_id = ? , price = ?, "
@@ -143,7 +128,6 @@ public class ProductDAO extends AbstractDAO<ProductDTO> implements IProductDAO {
                     dto.getCategoryId(), dto.getPrice(),
                     dto.getDescription(), dto.getPhoto(), dto.isStatus(), dto.getId());
         } else { // exist both
-            System.out.println("workd eixist both");
             String sql = "UPDATE product_tb "
                     + "SET title = ?, author = ?, quantity = ?, category_id = ? , price = ?, "
                     + "photo = ?, "
@@ -205,7 +189,6 @@ public class ProductDAO extends AbstractDAO<ProductDTO> implements IProductDAO {
             return flag;
 
         } catch (SQLException | NamingException e) {
-            e.printStackTrace();
             return false;
         } finally {
             try {
@@ -219,43 +202,10 @@ public class ProductDAO extends AbstractDAO<ProductDTO> implements IProductDAO {
                     connection.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
                 return false;
-
             }
         }
     }
-
-//    @Override
-//    public boolean updateQuantity(CartProductObject cart) {
-//        Connection connection = null;
-//        PreparedStatement preStm = null;
-//        ResultSet rs = null;
-//        try {
-//            connection.setAutoCommit(false);
-//            String sql = "DECLARE @quantity int; "
-//                    + "SELECT @quantity = p.quantity "
-//                    + "FROM product_tb p "
-//                    + "WHERE id = ?; "
-//                    + "UPDATE product_tb set quantity = (@quantity - ?) where id = ?";
-//            boolean flag = false;
-//            for (Map.Entry<Long, ProductCartDTO> entry : cart.getCart().entrySet()) {
-//                preStm.setLong(1, entry.getKey()); //product id
-//                preStm.setInt(2, entry.getValue().getQuantity()); // quantity
-//                preStm.setLong(3, entry.getKey()); //product id
-//                flag = preStm.executeUpdate() > 0;
-//                if (flag == false) {
-//                    
-//                    return false;
-//                }
-//            }
-//            connection.commit();
-//            return true;
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//    }
     @Override
     public boolean updateQuantity(CartProductObject cart) {
         Connection connection = null;
@@ -273,20 +223,8 @@ public class ProductDAO extends AbstractDAO<ProductDTO> implements IProductDAO {
                     + "UPDATE product_tb SET quantity = @finalQuantity "
                     + "WHERE id = ? AND @finalQuantity  IS NOT NULL";
 
-//            Set<Long> key = cart.getCart().keySet();
             preStm = connection.prepareStatement(sql);
 
-//            for (Long long1 : key) {
-//                preStm.setLong(1, long1);
-//                preStm.setInt(2, cart.getCart().get(long1).getQuantity()); // quantity
-//                preStm.setLong(3, long1); //product id
-//                preStm.setInt(4, cart.getCart().get(long1).getQuantity()); // quantity
-//                preStm.setLong(5, long1); //product id
-//                flag = preStm.executeUpdate() > 0;
-//                if (flag == false) {
-//                    return false;
-//                }
-//            }
             for (Map.Entry<Long, ProductCartDTO> entry :cart.getCart().entrySet()) {
                 preStm.setLong(1, entry.getKey()); //product id
                 preStm.setInt(2, entry.getValue().getQuantity()); // quantity
@@ -301,7 +239,6 @@ public class ProductDAO extends AbstractDAO<ProductDTO> implements IProductDAO {
             connection.commit();
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
             if (connection != null) {
                 try {
                     connection.rollback();

@@ -6,7 +6,9 @@
 package controllers.web;
 
 import cart.CartProductObject;
+import constant.SystemConstant;
 import dtos.CodeDTO;
+import dtos.UserDTO;
 import services.IProductService;
 
 import javax.inject.Inject;
@@ -43,6 +45,10 @@ public class ApplyCodeController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        UserDTO user = (UserDTO) SessionUtil.getInstance().getValue(request, "USERMODEL");
+            if (user == null || (user.getRoleId() == SystemConstant.ADMIN)) {
+                response.sendRedirect("/product-get");
+            }
         try {
             String id = request.getParameter("id");
             float total = Float.parseFloat(request.getParameter("total"));
@@ -76,7 +82,6 @@ public class ApplyCodeController extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher(CART_PAGE);
             rd.forward(request, response);
         } catch (Exception e) {
-            e.printStackTrace();
             CartProductObject cart = (CartProductObject) SessionUtil.getInstance()
                 .getValue(request, "CARTPRODUCT");
             if (cart != null) {

@@ -9,7 +9,7 @@
     <body>
         <a href="views/admin/editCode.jsp" class="btn btn-sm btn-success text-right mb-3">New</a>
 
-   
+
         <!--alert-->
         <c:if test="${not empty requestScope.MESSAGE}">
             <div class="alert alert-${requestScope.TYPE} alert-dismissible fade show mt-3" role="alert">

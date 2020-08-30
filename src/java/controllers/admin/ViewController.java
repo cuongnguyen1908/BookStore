@@ -22,8 +22,9 @@ import services.IUserService;
  *
  * @author nguyen
  */
-@WebServlet(name = "ViewController", urlPatterns = {"/admin-view"})
+@WebServlet(urlPatterns = {"/admin-view"})
 public class ViewController extends HttpServlet {
+    private final String VIEW_PAGE = "/views/admin/view.jsp";
 
     @Inject
     private IUserService userService;
@@ -34,14 +35,13 @@ public class ViewController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        System.out.println("view workedsdasdasd");
         UserDTO user = new UserDTO();
         user.setListResult(userService.findAll(true));
         RoleDTO role = new RoleDTO();
         role.setListResult(roleService.findAll());
         request.setAttribute("USERLIST", user);
         request.setAttribute("ROLELIST", role);
-        RequestDispatcher rd = request.getRequestDispatcher("/views/admin/view.jsp");
+        RequestDispatcher rd = request.getRequestDispatcher(VIEW_PAGE);
         rd.forward(request, response);
     }
 

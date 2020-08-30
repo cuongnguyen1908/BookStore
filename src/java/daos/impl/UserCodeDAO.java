@@ -17,7 +17,7 @@ public class UserCodeDAO extends AbstractDAO<FlagDTO> implements IUserCodeDAO {
 
     @Override
     public Long save(UserCodeDTO dto) {
-        String sql = "INSERT INTO user_code_tb(user_id, code_id)";
+        String sql = "INSERT INTO user_code_tb(user_id, code_id) VALUES (?, ?)";
         return insert(sql, dto.getUserId(), dto.getCode_id());
     }
 }

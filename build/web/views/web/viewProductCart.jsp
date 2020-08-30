@@ -139,7 +139,7 @@
 </c:if>
     
 
-<c:if test="${not empty sessionScope.CARTPRODUCT.cart}">\
+<c:if test="${not empty sessionScope.CARTPRODUCT.cart}">
     <form action="/save-cart" method="POST">
         <input type="hidden" name="id" value="${sessionScope.USERMODEL.id}"/>
         <input type="hidden" name="codeId" value="${requestScope.IDCODE}"/>

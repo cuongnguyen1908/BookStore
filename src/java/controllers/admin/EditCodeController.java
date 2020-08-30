@@ -58,7 +58,6 @@ public class EditCodeController extends HttpServlet {
             }
             if (foundErr) {
                 request.setAttribute("ERROR", error);
-                System.out.println("worked error");
             }else {
                 CodeDTO dto = new CodeDTO();
                 dto.setCode(code);

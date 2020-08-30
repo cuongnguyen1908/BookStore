@@ -6,13 +6,11 @@
 package controllers.admin;
 
 import constant.SystemConstant;
-import dtos.*;
+import dtos.CategoryDTO;
+import dtos.ProductDTO;
+import dtos.ProductEditErrorDTO;
 import services.ICategoryService;
 import services.IProductService;
-import services.IRoleService;
-import services.IUserService;
-import utils.HashFunctions;
-import utils.SessionUtil;
 
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
@@ -22,10 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  *

@@ -20,7 +20,6 @@ public class CodeMapper implements RowMapper<CodeDTO> {
             code.setCreatedDate(rs.getTimestamp("createdDate"));
             return code;
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("CodeMapper_SQLException " + e.getMessage());
         }
         return null;

@@ -6,6 +6,8 @@
 package controllers.web;
 
 import cart.CartProductObject;
+import constant.SystemConstant;
+import dtos.UserDTO;
 import utils.CalculateTotal;
 import utils.SessionUtil;
 
@@ -28,64 +30,72 @@ public class UpdateCartProductController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try {
-            Long id = Long.valueOf(request.getParameter("id"));
-            int quantity = Integer.parseInt(request.getParameter("quantity"));
-            CartProductObject cart = (CartProductObject) SessionUtil.getInstance()
-                    .getValue(request, "CARTPRODUCT");
-            if (cart != null) {
-                int quantityTotal = -1;
-                try {
-                    quantityTotal = cart.getCart().get(id).getTotalQuantity();
-                } catch (NullPointerException e) {
-                    request.setAttribute("TYPE", "danger");
-                    request.setAttribute("MESSAGE", "Update fail!");
-                    request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
-                    RequestDispatcher rd = request.getRequestDispatcher(CART_PRODUCT_PAGE);
-                    rd.forward(request, response);
-                }
-
-                int flagInStock = quantityTotal - quantity;
-                if (flagInStock >= 0) { // instock
-                    //in stock
-                    cart.updateQuantity(id, quantity);
-                    request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
-                    request.setAttribute("TYPE", "success");
-                    request.setAttribute("MESSAGE", "Update success!");
-                } else { //out of stock
+        UserDTO user = (UserDTO) SessionUtil.getInstance().getValue(request, "USERMODEL");
+        if (user == null || (user.getRoleId() == SystemConstant.ADMIN)) {
+            response.sendRedirect(request.getContextPath()
+                    + "/login?action=login&message=Please Login&alert=danger");
+        } else {
+            try {
+                Long id = Long.valueOf(request.getParameter("id"));
+                int quantity = Integer.parseInt(request.getParameter("quantity"));
+                CartProductObject cart = (CartProductObject) SessionUtil.getInstance()
+                        .getValue(request, "CARTPRODUCT");
+                if (cart != null) {
+                    int quantityTotal = -1;
                     try {
-                        request.setAttribute("TYPE", "danger");
-                        request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
-                        request.setAttribute("MESSAGE", "Product "
-                                + cart.getCart().get(id).getName() + " only have " + cart.getCart().get(id).getTotalQuantity() + " item in stock!");
+                        quantityTotal = cart.getCart().get(id).getTotalQuantity();
                     } catch (NullPointerException e) {
                         request.setAttribute("TYPE", "danger");
                         request.setAttribute("MESSAGE", "Update fail!");
+                        request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
                         RequestDispatcher rd = request.getRequestDispatcher(CART_PRODUCT_PAGE);
                         rd.forward(request, response);
                     }
 
+                    int flagInStock = quantityTotal - quantity;
+                    if (flagInStock >= 0) { // instock
+                        //in stock
+                        cart.updateQuantity(id, quantity);
+                        request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
+                        request.setAttribute("TYPE", "success");
+                        request.setAttribute("MESSAGE", "Update success!");
+                    } else { //out of stock
+                        try {
+                            request.setAttribute("TYPE", "danger");
+                            request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
+                            request.setAttribute("MESSAGE", "Product "
+                                    + cart.getCart().get(id).getName() + " only have " + cart.getCart().get(id).getTotalQuantity() + " item in stock!");
+                        } catch (NullPointerException e) {
+                            request.setAttribute("TYPE", "danger");
+                            request.setAttribute("MESSAGE", "Update fail!");
+                            RequestDispatcher rd = request.getRequestDispatcher(CART_PRODUCT_PAGE);
+                            rd.forward(request, response);
+                        }
+
+                    }
+                } else {
+                    request.setAttribute("TYPE", "danger");
+                    request.setAttribute("MESSAGE", "Update fail!");
+                    if (cart != null) {
+                                            request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
+                    }
+
                 }
-            } else {
+
+                RequestDispatcher rd = request.getRequestDispatcher(CART_PRODUCT_PAGE);
+                rd.forward(request, response);
+
+            } catch (NumberFormatException e) {
+                CartProductObject cart = (CartProductObject) SessionUtil.getInstance()
+                        .getValue(request, "CARTPRODUCT");
+                if (cart != null) {
+                    request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
+                }
                 request.setAttribute("TYPE", "danger");
                 request.setAttribute("MESSAGE", "Update fail!");
-                request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
-
+                RequestDispatcher rd = request.getRequestDispatcher(CART_PRODUCT_PAGE);
+                rd.forward(request, response);
             }
-
-            RequestDispatcher rd = request.getRequestDispatcher(CART_PRODUCT_PAGE);
-            rd.forward(request, response);
-
-        } catch (NumberFormatException e) {
-            CartProductObject cart = (CartProductObject) SessionUtil.getInstance()
-                    .getValue(request, "CARTPRODUCT");
-            if (cart != null) {
-                request.setAttribute("TOTAL", CalculateTotal.calculate(cart));
-            }
-            request.setAttribute("TYPE", "danger");
-            request.setAttribute("MESSAGE", "Update fail!");
-             RequestDispatcher rd = request.getRequestDispatcher(CART_PRODUCT_PAGE);
-            rd.forward(request, response);
         }
 
     }

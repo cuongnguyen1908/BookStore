@@ -14,7 +14,6 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -51,12 +50,7 @@ public class ProcessEditController extends HttpServlet {
         String regex = "^[a-zA-Z0-9][a-z0-9_\\.]{1,32}@[a-z0-9]{2,}(\\.[a-z0-9]{2,4}){1,2}$";
         EditErrorDTO error = new EditErrorDTO();
         Optional<String> id = Optional.ofNullable(request.getParameter("id"));
-        String fileName = request.getParameter("file");
-        if (fileName == null) {
-            foundError = true;
-            error.setFileEmpty("Please select file");
-        }
-
+      
         String password = request.getParameter("password");
         String rePassword = request.getParameter("rePassword");
 
@@ -175,6 +169,7 @@ public class ProcessEditController extends HttpServlet {
                 user.setStatus(true);
                 if (!this.userService.existUserByUsername(username)) {
                     Long idNew = this.userService.save(user);
+                    url = SUCCESS;
                     request.setAttribute("TYPE", "success");
                     request.setAttribute("MESSAGE", "Create success!");
                 }

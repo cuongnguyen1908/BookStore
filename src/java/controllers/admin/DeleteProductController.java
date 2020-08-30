@@ -36,7 +36,6 @@ public class DeleteProductController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("id");
-//        System.out.println("id: " + id);
             if (productService.delete(Long.valueOf(id), SystemConstant.INACTIVE)) {
                 request.setAttribute("TYPE", "success");
                 request.setAttribute("MESSAGE", "Delete success!");

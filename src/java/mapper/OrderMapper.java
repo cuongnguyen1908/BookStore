@@ -13,6 +13,7 @@ public class OrderMapper implements RowMapper<OrderDTO> {
 
         try {
             OrderDTO order = new OrderDTO();
+            order.setId(rs.getLong("id"));
             order.setName(rs.getString("order_name"));
             order.setTotal(rs.getFloat("total"));
             order.setCreatedDate(rs.getTimestamp("createdDate"));

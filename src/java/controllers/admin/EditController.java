@@ -5,11 +5,11 @@
  */
 package controllers.admin;
 
-import dtos.CategoryDTO;
-import dtos.ProductDTO;
-import services.ICategoryService;
-import services.IProductService;
-
+import constant.SystemConstant;
+import dtos.RoleDTO;
+import dtos.UserDTO;
+import java.io.IOException;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,46 +17,41 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import services.IRoleService;
+import services.IUserService;
 
 /**
  *
  * @author nguyen
  */
-@WebServlet(urlPatterns = {"/admin-edit-product"})
-public class EditProductController extends HttpServlet {
-
-    private final String EDIT_PAGE = "/views/admin/editProduct.jsp";
-
-    @Inject
-    private IProductService productService;
+@WebServlet(urlPatterns = {"/admin-edit"})
+public class EditController extends HttpServlet {
+    private final String EDIT_USER_PAGE = "/views/admin/edit.jsp";
 
     @Inject
-    private ICategoryService categoryService;
+    private IUserService userService;
+    
+    @Inject
+    private IRoleService roleService;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         Optional<String> id = Optional.ofNullable(request.getParameter("id"));
-
+        
         if (id.isPresent()) {
-            ProductDTO product = new ProductDTO();
-            product = this.productService.findBookById(Long.valueOf(id.get()));
-            request.setAttribute("BOOK", product);
+            UserDTO user = new UserDTO();
+            user = userService.findUserByIdAndStatus(Long.valueOf(id.get()), SystemConstant.ACTIVE);
+            request.setAttribute("USER", user);
         }
-        CategoryDTO category = new CategoryDTO();
-        category.setListResult(categoryService.findAll());
-        request.setAttribute("CATEGORYLIST", category);
-
-        RequestDispatcher rd = request.getRequestDispatcher(EDIT_PAGE);
+        RoleDTO role = new RoleDTO();
+        role.setListResult(roleService.findAll());  
+        request.setAttribute("ROLELIST", role);
+        RequestDispatcher rd = request.getRequestDispatcher(EDIT_USER_PAGE);
         rd.forward(request, response);
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

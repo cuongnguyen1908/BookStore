@@ -6,7 +6,7 @@
 package controllers.web;
 
 import cart.CartProductObject;
-import services.ICategoryService;
+import dtos.UserCodeDTO;
 import services.IProductService;
 
 import javax.inject.Inject;
@@ -17,8 +17,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Random;
 import services.IOrderDetailService;
 import services.IOrderService;
+import services.IUserCodeService;
 import utils.SessionUtil;
 
 /**
@@ -35,13 +37,13 @@ public class SaveCartController extends HttpServlet {
     private IProductService productService;
 
     @Inject
-    private ICategoryService categoryService;
-
-    @Inject
     private IOrderService orderService;
 
     @Inject
     private IOrderDetailService orderDetailService;
+
+    @Inject
+    private IUserCodeService userCodeService;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -56,52 +58,73 @@ public class SaveCartController extends HttpServlet {
                 String total = request.getParameter("total");
                 String finalTotal = request.getParameter("finalTotal");
                 float fTotal = 0;
-                if (finalTotal != null) { // apply code
-                    System.out.println("worked use code");
-                    Long lCodeId = Long.valueOf(codeId);
+                if (finalTotal.trim().length() > 1) { // apply code
                     fTotal = Float.parseFloat(finalTotal);
-                    //create order
-                    Long oderId = this.orderService.save(Long.valueOf(id), "test name", fTotal);
-                    if (oderId > 0) {
-                        //check & update quantity
+                } else { // not use code
+                    fTotal = Float.parseFloat(total);
+                }
 
-                        boolean flagUpdate = this.productService.updateQuantity(cart);
-                        if (flagUpdate) {
-                            //create order detail
-                            if (this.orderDetailService.save(cart, Long.valueOf(id), oderId)) {
-                                SessionUtil.getInstance().removeValue(request, "CARTPRODUCT");
-                                request.setAttribute("TYPE", "success");
-                                request.setAttribute("MESSAGE", "Order success!");
-                            }
-                        } else { // flag update fail
+                //create order
+                Random rand = new Random();
+                Long oderId = this.orderService.save(Long.valueOf(id), "Order no " + rand.nextInt(10000), fTotal);
+                if (oderId > 0) { //create order success
+                    //check & update quantity
+                    boolean flagUpdate = this.productService.updateQuantity(cart);
+                    if (flagUpdate) { //check and update minus 
+                        //create order detailsuccess
+                        if (this.orderDetailService.save(cart, Long.valueOf(id), oderId)) { //create orderdetail success
                             SessionUtil.getInstance().removeValue(request, "CARTPRODUCT");
+                            if (finalTotal.trim().length() > 1) { //has use code
+                                //create user code
+                                Long lCodeId = Long.valueOf(codeId);
+                                UserCodeDTO userCodeDTO = new UserCodeDTO();
+                                userCodeDTO.setCode_id(lCodeId);
+                                userCodeDTO.setUserId(Long.valueOf(id));
+                                if (this.userCodeService.save(userCodeDTO) == 0) { // create code user fail
+                                    SessionUtil.getInstance().removeValue(request, "CARTPRODUCT");
+                                    boolean flagDeleteOrder = this.orderService.deleteOrderById(oderId);
+                                    request.setAttribute("TYPE", "danger");
+                                    request.setAttribute("MESSAGE", "Some thing error. Please try later!");
+                                    RequestDispatcher rd = request.getRequestDispatcher(HOME_PAGE);
+                                    rd.forward(request, response);
+                                }
+                            }
+                            request.setAttribute("TYPE", "success");
+                            request.setAttribute("MESSAGE", "Save cart success!");
+                        } else { //create order detail fail
+                            SessionUtil.getInstance().removeValue(request, "CARTPRODUCT");
+
+                            boolean flagDeleteOrder = this.orderService.deleteOrderById(oderId);
                             request.setAttribute("TYPE", "danger");
                             request.setAttribute("MESSAGE", "Some thing error. Please try later!");
+                            RequestDispatcher rd = request.getRequestDispatcher(HOME_PAGE);
+                            rd.forward(request, response);
                         }
-                    } else { // order id fail
+                    } else { // flag update fail
+                        SessionUtil.getInstance().removeValue(request, "CARTPRODUCT");
+                        boolean flagDeleteOrder = this.orderService.deleteOrderById(oderId);
                         request.setAttribute("TYPE", "danger");
-                        request.setAttribute("MESSAGE", "Order fail!");
+                        request.setAttribute("MESSAGE", "Some thing error. Please try later!");
                     }
+                } else { // create order fail
 
-                } else { // not use code
-                    System.out.println("worked not use code");
-                    fTotal = Float.parseFloat(total);
-                    
-                    
+                    request.setAttribute("TYPE", "danger");
+                    request.setAttribute("MESSAGE", "Some thing error. Please try later!");
                 }
 
             } else { //cart null
                 request.setAttribute("TYPE", "danger");
-                request.setAttribute("MESSAGE", "Order fail!");
+                request.setAttribute("MESSAGE", "Some thing error. Please try later!");
             }
+            RequestDispatcher rd = request.getRequestDispatcher(HOME_PAGE);
+            rd.forward(request, response);
 
-        } catch (Exception e) {
+        } catch (Exception e) { // if invalid or nul
+            request.setAttribute("TYPE", "danger");
+            request.setAttribute("MESSAGE", "Some thing error. Please try later!");
             RequestDispatcher rd = request.getRequestDispatcher(HOME_PAGE);
             rd.forward(request, response);
         }
-
-        RequestDispatcher rd = request.getRequestDispatcher(EDIT_PAGE);
-        rd.forward(request, response);
     }
 
 // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

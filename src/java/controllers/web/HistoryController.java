@@ -3,14 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers.admin;
+package controllers.web;
 
-import dtos.CategoryDTO;
-import dtos.ProductDTO;
-import services.ICategoryService;
-import services.IProductService;
+import constant.SystemConstant;
+import dtos.OrderDTO;
+import dtos.UserDTO;
+import utils.SessionUtil;
 
-import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,45 +17,50 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import javax.inject.Inject;
+import services.IOrderDetailService;
+import services.IOrderService;
 
 /**
- *
  * @author nguyen
  */
-@WebServlet(urlPatterns = {"/admin-edit-product"})
-public class EditProductController extends HttpServlet {
-
-    private final String EDIT_PAGE = "/views/admin/editProduct.jsp";
+@WebServlet(urlPatterns = {"/history"})
+public class HistoryController extends HttpServlet {
 
     @Inject
-    private IProductService productService;
+    private IOrderService orderService;
 
     @Inject
-    private ICategoryService categoryService;
+    private IOrderDetailService orderDetailService;
+
+    private final String HISTORY_PAGE = "/views/web/history.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        Optional<String> id = Optional.ofNullable(request.getParameter("id"));
 
-        if (id.isPresent()) {
-            ProductDTO product = new ProductDTO();
-            product = this.productService.findBookById(Long.valueOf(id.get()));
-            request.setAttribute("BOOK", product);
+        UserDTO user = (UserDTO) SessionUtil.getInstance().getValue(request, "USERMODEL");
+        if (user == null || (user.getRoleId() == SystemConstant.ADMIN)) {
+            response.sendRedirect(request.getContextPath()
+                    + "/login?action=login&message=Please Login&alert=danger");
+        } else { //customer exist 
+            OrderDTO order = new OrderDTO();
+            order.setListResult(this.orderService.findAllByUserId(user.getId()));
+            if (order.getListResult().size() > 0) { // exist order
+                for (int i = 0; i < order.getListResult().size(); i++) {
+                    order.getListResult().get(i).setOrderDetail(this.orderDetailService.findAllByOrderId(order.getListResult().get(i).getId()));
+                }
+            }
+            request.setAttribute("ORDERLIST", order);
+            RequestDispatcher rd = request.getRequestDispatcher(HISTORY_PAGE);
+            rd.forward(request, response);
+
         }
-        CategoryDTO category = new CategoryDTO();
-        category.setListResult(categoryService.findAll());
-        request.setAttribute("CATEGORYLIST", category);
 
-        RequestDispatcher rd = request.getRequestDispatcher(EDIT_PAGE);
-        rd.forward(request, response);
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the
+    // code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
